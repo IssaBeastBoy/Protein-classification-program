@@ -7,7 +7,7 @@ By Thulani Tshabalala
    tshabalalaboyt@gmail.com
 """
 
-File_Location= input("Input FASTA file location:  ") # will take in the file location from user
+File_Location= input("Input FASTA file locationc containing the gene sequence:  ") # will take in the file location from user
 
 Codon_info = [ [ [ ['TTT',0], ['TTC',0] ], 'Phe'], [ [ ['TTA',0] ,['TTG',0], ['CTT',0], ['CTC',0], 
 ['CTA',0], ['CTG',0] ] ,'Lue'], [ [ ['ATT',0], ['ATC',0], ['ATA',0] ],  'Ile' ], [ [ ['ATG',0] ], 'Met' ], 
@@ -148,13 +148,30 @@ def Polypeptid_Charge (polypeptid):
     OutputString = OutputString + '                                                -> Glutamine  ' + str(Negitive_Gln) + '\n'
     OutputString = OutputString + '                         : Positive Amino Acids -> Aspartic acid ' + str(Positive_Arg) + '\n'
     OutputString = OutputString + '                                                -> Lysine ' + str(Positive_Lys) + '\n'
-    OutputString = OutputString +'                                                -> Histidine ' +  str(Positive_His) + '\n'
+    OutputString = OutputString + '                                                 -> Histidine ' +  str(Positive_His) + '\n'
     OutputString = OutputString + 'Polypeptide and charge location \n'+ polypeptid_ChargePosition
     return (OutputString)
 
 def predicted_structure (polypeptid):
+    print('Secondary predicted protein structures for polypeptid, base on their polarity.')
+    sequence = polypeptid
+    aminoAcid = sequence[0:3]
+    sequence = sequence[3:]
+    startOf_sequenceBeta = 0
+    startOf_sequenceAlpha = 0
+    endOf_sequence = 0
+    Alpha_Helix = 'Predicted alpha helix structure: \n'
+    Beta_Sheets = 'Predicted beta sheet strcuture: \n'
+    while(aminoAcid != ''):
+        if(aminoAcid == 'Ala' or aminoAcid =='Ile' or aminoAcid =='Leu' or aminoAcid =='Met' or aminoAcid == 'Phe' or aminoAcid =='Val' or aminoAcid =='Pro' or aminoAcid =='Gly' or aminoAcid =='Trp' or aminoAcid =='Tyr' or aminoAcid =='Met'):
+            startOf_sequence = endOf_sequence
 
-
+            Beta_Sheets = ''
+            Alpha_Helix = Alpha_Helix + aminoAcid
+        if(aminoAcid =='Gln' or aminoAcid =='Asn' or aminoAcid =='His' or aminoAcid =='Ser' or aminoAcid =='Thr' or aminoAcid =='Tyr' or aminoAcid =='Cys'):
+            Alpha_Helix = ''
+            Beta_Sheets = Beta_Sheets + aminoAcid
+        endOf_sequence = endOf_sequence + 1 
 
 try:
     with open(File_Location,'r') as  Gene_Sequence: #open the FASTA file and stores the gene sequence into GENE_Sequence
