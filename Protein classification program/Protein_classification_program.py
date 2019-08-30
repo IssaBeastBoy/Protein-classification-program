@@ -20,11 +20,13 @@ Codon_info = [ [ [ ['TTT',0], ['TTC',0] ], 'Phe'], [ [ ['TTA',0] ,['TTG',0], ['C
 ['CGC',0], ['CGA',0], ['CGG',0], ['AGA',0], ['AGG',0] ], 'Arg' ], [ [ ['GGT',0], ['GGC',0], ['GGA',0], ['GGG',0] ], 'Gly' ],
 [ [ ['TAA',0], ['TCA',0], ['TGA',0] ], 'STOP' ]  ]
 
-AminoAcid_Symbols = [ ['Alanine','Ala','A'], ['Arginine','Arg','R'], ['Asparagine', 'Asn', 'N'], 
-['Aspartic acid', 'Asp', 'D'], ['Cysteine', 'Cys','C'], ['Glutamic acid', 'Glu', 'E'], ['Glutamine', 'Gln', 'Q'], 
-['Glycine', 'Gly','G'], ['Histidine','His',	'H'], ['Isoleucine', 'Ile',	'I'], ['Leucine', 'Leu', 'L'], 
-['Lysine', 'Lys','K'], ['Methionine', 'Met', 'M'], ['Phenylalanine', 'Phe',	'F'], ['Proline', 'Pro', 'P'],
-['Serine', 'Ser', 'S'], ['Threonine', 'Thr',	'T'], ['Tryptophan', 'Trp',	'W'], ['Valine', 'Val',	'V'] ]
+AminoAcid_Symbols = [ ['Alanine','Ala','A'], ['Arginine','Arg','R'], 
+['Aspartic acid', 'Asp', 'D'], ['Cysteine', 'Cys','C'], ['Glutamic acid', 'Glu', 'E'], 
+['Glutamine', 'Gln', 'Q'], ['Glycine', 'Gly','G'], ['Histidine','His',	'H'], 
+['Isoleucine', 'Ile',	'I'], ['Leucine', 'Leu', 'L'], ['Lysine', 'Lys','K'], 
+['Methionine', 'Met', 'M'], ['Phenylalanine', 'Phe',	'F'], ['Proline', 'Pro', 'P'],
+['Serine', 'Ser', 'S'], ['Threonine', 'Thr',	'T'], ['Tryptophan', 'Trp',	'W'], 
+['Valine', 'Val',	'V'] ]
 
 def translation(gene, codon_info): # translations the gene sequence to an polypeptide
     stop = 0                                
@@ -155,22 +157,45 @@ def Polypeptid_Charge (polypeptid):
 def predicted_structure (polypeptid):
     print('Secondary predicted protein structures for polypeptid, base on their polarity.')
     sequence = polypeptid
-    aminoAcid = sequence[0:3]
-    sequence = sequence[3:]
-    startOf_sequenceBeta = 0
-    startOf_sequenceAlpha = 0
+    aminoAcid = ' '
+    startOf_sequenceBeta = 1
+    startOf_sequenceAlpha = 1
+    close_Alpha = 1
+    close_Beta = 1
+    alphaSeq_increBool = 0
+    beatSeq_increBool = 0
     endOf_sequence = 0
-    Alpha_Helix = 'Predicted alpha helix structure: \n'
-    Beta_Sheets = 'Predicted beta sheet strcuture: \n'
+    Alpha_Helix = 'Predicted alpha helix structures: \n'
+    Beta_Sheets = 'Predicted beta sheet strcutures: \n'
     while(aminoAcid != ''):
         if(aminoAcid == 'Ala' or aminoAcid =='Ile' or aminoAcid =='Leu' or aminoAcid =='Met' or aminoAcid == 'Phe' or aminoAcid =='Val' or aminoAcid =='Pro' or aminoAcid =='Gly' or aminoAcid =='Trp' or aminoAcid =='Tyr' or aminoAcid =='Met'):
-            startOf_sequence = endOf_sequence
-
-            Beta_Sheets = ''
+            if(close_Beta == 0):
+                Beta_Sheets = Beta_Sheets +'[ End of sequence: ' + str(endOf_sequence) + ' ] \n'
+                close_Beta = 1
+                startOf_sequenceBeta = endOf_sequence + 1
+                beatSeq_increBool = 0
+            if(alphaSeq_increBool == 0):
+                Alpha_Helix = Alpha_Helix + '[ Start of sequence: ' + str(startOf_sequenceAlpha) + '] -> '
+                alphaSeq_increBool = 1
+                close_Alpha = 0
             Alpha_Helix = Alpha_Helix + aminoAcid
         if(aminoAcid =='Gln' or aminoAcid =='Asn' or aminoAcid =='His' or aminoAcid =='Ser' or aminoAcid =='Thr' or aminoAcid =='Tyr' or aminoAcid =='Cys'):
-            Alpha_Helix = ''
+            if(close_Alpha == 0):
+                Alpha_Helix = Alpha_Helix +'[ End of sequence: ' + str(endOf_sequence) + ' ] \n'
+                close_Alpha = 1
+                alphaSeq_increBool = 0
+                startOf_sequenceAlpha = endOf_sequence + 1
+            if(beatSeq_increBool == 0):
+                Beta_Sheets = Beta_Sheets + '[ Start of sequence: ' + str(startOf_sequenceBeta) + '] -> ' 
+                beatSeq_increBool = 1
+                close_Beta = 0
             Beta_Sheets = Beta_Sheets + aminoAcid
+        if ( aminoAcid==''):
+            if(close_Alpha == 0):
+                Alpha_Helix = Alpha_Helix + '[ End of sequence: ' + str(endOf_sequence) + '] \n'
+            if(close_Beta == 0):
+                Beta_Sheets = Beta_Sheets + '[ End of sequence: ' + str(endOf_sequence) + '] \n'
+            return ([Beta_Sheets, Alpha_Helix])
         endOf_sequence = endOf_sequence + 1 
 
 try:
