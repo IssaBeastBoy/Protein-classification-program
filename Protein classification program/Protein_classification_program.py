@@ -12,7 +12,7 @@ File_Location= input("Input FASTA file locationc containing the gene sequence:  
 Codon_info = [ [ [ ['TTT',0], ['TTC',0] ], 'Phe'], [ [ ['TTA',0] ,['TTG',0], ['CTT',0], ['CTC',0], 
 ['CTA',0], ['CTG',0] ] ,'Lue'], [ [ ['ATT',0], ['ATC',0], ['ATA',0] ],  'Ile' ], [ [ ['ATG',0] ], 'Met' ], 
 [ [ ['GTT',0], ['GTC',0], ['GTA',0], ['GTG',0] ], 'Val' ], [ [ ['TCT',0], ['TCC',0], ['TCA',0], ['TCG',0], 
-['AGT',0], ['AGC',0] ], 'Ser' ], [ [ ['CTT',0], ['CCC',0], ['CCA',0], ['CCG',0] ], 'Pro' ], [ [ ['ACT',0], 
+['AGT',0], ['AGC',0] ], 'Ser' ], [ [ ['CCT',0], ['CCC',0], ['CCA',0], ['CCG',0] ], 'Pro' ], [ [ ['ACT',0], 
 ['ACC',0], ['ACA',0], ['ACG',0] ], 'Thr' ], [ [ ['GCT',0], ['GCC',0], ['GCA',0], ['GCG',0] ], 'Ala' ], 
 [ [ ['TAT',0], ['TAC',0] ], 'Tyr' ], [ [ ['CAT',0], ['CAC',0] ], 'His' ], [ [ ['CAA',0], ['CAG',0] ], 'Gln' ],
 [ [ ['AAT',0], ['ACC',0] ], 'Asn' ], [ [ ['AAA',0], ['AAG',0] ], 'Lys' ], [ [ ['GAT',0], ['GAC',0] ], 'Asp' ], 
@@ -35,6 +35,8 @@ def translation(gene, codon_info): # translations the gene sequence to an polype
     polypeptide_Return = ''
     sequence = gene
     amino_Acid =''
+    Liststru2 =''
+    Liststru1 =''
     while('L' != nucleotide ):
         if('G'== nucleotide or 'T'== nucleotide or 'A'== nucleotide or 'C'== nucleotide):
             amino_Acid = amino_Acid + nucleotide   # Addes nucleotides together to form an amina acid
@@ -45,6 +47,16 @@ def translation(gene, codon_info): # translations the gene sequence to an polype
         if(stop==3):
             codon_Num = 0
             stop=0
+            if(amino_Acid == 'TAA' or amino_Acid =='TCA' or amino_Acid == 'TGA'):
+#                print('Polypeptide sequence -> ' + polypeptide_Return + '\n')
+#                print ('Codon Bias for polypeptid -> \n' + Codon_Bias(codon_info_Return, polypeptide_Return))
+#                print('Polypeptide charged positions -> \n' + Polypeptid_Charge (polypeptide_Return)  )
+ #               List_Ofstructures = predicted_structure(polypeptide_Return)
+  #              Liststru1 = List_Ofstructures[0]
+   #             Liststru2 = List_Ofstructures[1]
+    #            print('\nPolypeptide predicted structure -> \n' + Liststru1 + '\n' + Liststru2)
+                sequence = sequence[1:]
+                return (translation(sequence, Codon_info))
             while(codon_Num<len(codon_info_Return)):
                 boolStopper = 0
                 list_aminoAcid = codon_info_Return[codon_Num] #list_ aminoAcid gives [List of codons, Amino Acid]
@@ -63,17 +75,16 @@ def translation(gene, codon_info): # translations the gene sequence to an polype
                     break
                 codon_Num = codon_Num+1
         sequence = sequence[1:]             #Removes leading nucleotide in the sequence
-        nucleotide = sequence[0]            
-    return([polypeptide_Return,codon_info_Return])
+        nucleotide = sequence[0]    
 
 def Codon_Bias (codon_Info, polypeptid): # Predict possible codon bais for an amino
-    print('Bais is considered when codon is used more then 50 times')
     moveTho_codon_Info=0
     BiasOutput =''
     codon_Used = ''
     sequence = polypeptid
     aminoAcid_Codon = sequence[0:3]
     sequence = sequence[3:]
+    end_Ofsequence = 0
     while(moveTho_codon_Info<len(codon_Info)):
         aminoAcid_info = codon_Info[moveTho_codon_Info]
         AminoAcid = aminoAcid_info[1]
@@ -81,6 +92,8 @@ def Codon_Bias (codon_Info, polypeptid): # Predict possible codon bais for an am
             if (sequence != ''):
                 aminoAcid_Codon = sequence[0:3]
                 sequence = sequence[3:]
+            else:
+                end_Ofsequence = 1
             codons = aminoAcid_info[0]
             CodonType_Num = 0
             codonUsage = 0
@@ -95,16 +108,21 @@ def Codon_Bias (codon_Info, polypeptid): # Predict possible codon bais for an am
                 elif (CodonUsage>=codonB and codonB>50):
                     codon_Used = codon_Used + ', ' + codonProperties[0]
                 CodonType_Num = CodonType_Num + 1
+            moveTho_codon_Info =  moveTho_codon_Info + 1 
             if(codonB==0):
                 AminoAcid = AminoAcid + ' -> No codon bais'
                 BiasOutput = BiasOutput + AminoAcid + ' \n'
+                moveTho_codon_Info =0
+                if(end_Ofsequence == 1):
+                    return(BiasOutput)
             else:
                 BiasOutput = BiasOutput + AminoAcid + ' -> ' + codon_Used + ' \n'
-            moveTho_codon_Info =  moveTho_codon_Info + 1 
+                moveTho_codon_Info = 0
+                if(end_Ofsequence == 1):
+                    return(BiasOutput)        
             
         else:
             moveTho_codon_Info =  moveTho_codon_Info + 1 
-    return(BiasOutput)
 
 def Polypeptid_Charge (polypeptid):
     sequence = polypeptid
@@ -150,12 +168,12 @@ def Polypeptid_Charge (polypeptid):
     OutputString = OutputString + '                                                -> Glutamine  ' + str(Negitive_Gln) + '\n'
     OutputString = OutputString + '                         : Positive Amino Acids -> Aspartic acid ' + str(Positive_Arg) + '\n'
     OutputString = OutputString + '                                                -> Lysine ' + str(Positive_Lys) + '\n'
-    OutputString = OutputString + '                                                 -> Histidine ' +  str(Positive_His) + '\n'
+    OutputString = OutputString + '                                                -> Histidine ' +  str(Positive_His) + '\n'
     OutputString = OutputString + 'Polypeptide and charge location \n'+ polypeptid_ChargePosition
     return (OutputString)
 
 def predicted_structure (polypeptid):
-    print('Secondary predicted protein structures for polypeptid, base on their polarity.')
+    print('\nSecondary predicted protein structures for polypeptid, base on their polarity.')
     sequence = polypeptid
     aminoAcid = ' '
     startOf_sequenceBeta = 1
@@ -168,6 +186,8 @@ def predicted_structure (polypeptid):
     Alpha_Helix = 'Predicted alpha helix structures: \n'
     Beta_Sheets = 'Predicted beta sheet strcutures: \n'
     while(aminoAcid != ''):
+        aminoAcid = sequence[0:3]
+        sequence = sequence[3:]
         if(aminoAcid == 'Ala' or aminoAcid =='Ile' or aminoAcid =='Leu' or aminoAcid =='Met' or aminoAcid == 'Phe' or aminoAcid =='Val' or aminoAcid =='Pro' or aminoAcid =='Gly' or aminoAcid =='Trp' or aminoAcid =='Tyr' or aminoAcid =='Met'):
             if(close_Beta == 0):
                 Beta_Sheets = Beta_Sheets +'[ End of sequence: ' + str(endOf_sequence) + ' ] \n'
@@ -200,20 +220,13 @@ def predicted_structure (polypeptid):
 
 try:
     with open(File_Location,'r') as  Gene_Sequence: #open the FASTA file and stores the gene sequence into GENE_Sequence
-        gene_Information = Gene_Sequence.readlines() # Stores FASTA File heading
-        nucleotide_List = Gene_Sequence.readlines() # stores file as list of nucleotides 
+        gene_Information = Gene_Sequence.readline() # Stores FASTA File heading
         nucleotide_sequence =''
-        for index in nucleotide_List: # retrieve every nucleotide squence per line into single string of nucleotides
-            sequence_Length = len(index)
-            nucleotide_sequence = nucleotide_sequence + index[:sequence_Length-2]
-        nucleotide_sequenceStop = nucleotide_sequence +'L'
+        for line in  Gene_Sequence: # retrieve every nucleotide squence per line into single string of nucleotides
+            line = line [:(len(line)-1)]
+            nucleotide_sequence = nucleotide_sequence + line
+        nucleotide_sequence = nucleotide_sequence +'L'
+        translated = translation(nucleotide_sequence, Codon_info)
+        
 finally:
     print("Error. The file is not found ! \n >>> Program shutdown <<<") # error for file not found
-
-
-
-
-
-
-
-
