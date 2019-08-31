@@ -48,13 +48,13 @@ def translation(gene, codon_info): # translations the gene sequence to an polype
             codon_Num = 0
             stop=0
             if(amino_Acid == 'TAA' or amino_Acid =='TCA' or amino_Acid == 'TGA'):
-#                print('Polypeptide sequence -> ' + polypeptide_Return + '\n')
-#                print ('Codon Bias for polypeptid -> \n' + Codon_Bias(codon_info_Return, polypeptide_Return))
-#                print('Polypeptide charged positions -> \n' + Polypeptid_Charge (polypeptide_Return)  )
- #               List_Ofstructures = predicted_structure(polypeptide_Return)
-  #              Liststru1 = List_Ofstructures[0]
-   #             Liststru2 = List_Ofstructures[1]
-    #            print('\nPolypeptide predicted structure -> \n' + Liststru1 + '\n' + Liststru2)
+                print('Polypeptide sequence -> ' + polypeptide_Return + '\n')
+                print ('Codon Bias for polypeptid -> \n' + Codon_Bias(codon_info_Return, polypeptide_Return))
+                print('Polypeptide charged positions -> \n' + Polypeptid_Charge (polypeptide_Return)  )
+                List_Ofstructures = predicted_structure(polypeptide_Return)
+                Liststru1 = List_Ofstructures[0]
+                Liststru2 = List_Ofstructures[1]
+                print('\nPolypeptide predicted structure -> \n' + Liststru1 + '\n' + Liststru2)
                 sequence = sequence[1:]
                 return (translation(sequence, Codon_info))
             while(codon_Num<len(codon_info_Return)):
