@@ -6,27 +6,31 @@ also be predicted.
 By Thulani Tshabalala
    tshabalalaboyt@gmail.com
 """
-
+print ("This program functions for only prokaryotes and eukaryotes")
 File_Location= input("Input FASTA file locationc containing the gene sequence:  ") # will take in the file location from user
+Protein_source= input("For prokaryotes enter P and for eukaryotes enter E: ")
 
-Codon_info = [ [ [ ['TTT',0], ['TTC',0] ], 'Phe'], [ [ ['TTA',0] ,['TTG',0], ['CTT',0], ['CTC',0], 
-['CTA',0], ['CTG',0] ] ,'Lue'], [ [ ['ATT',0], ['ATC',0], ['ATA',0] ],  'Ile' ], [ [ ['ATG',0] ], 'Met' ], 
-[ [ ['GTT',0], ['GTC',0], ['GTA',0], ['GTG',0] ], 'Val' ], [ [ ['TCT',0], ['TCC',0], ['TCA',0], ['TCG',0], 
-['AGT',0], ['AGC',0] ], 'Ser' ], [ [ ['CCT',0], ['CCC',0], ['CCA',0], ['CCG',0] ], 'Pro' ], [ [ ['ACT',0], 
-['ACC',0], ['ACA',0], ['ACG',0] ], 'Thr' ], [ [ ['GCT',0], ['GCC',0], ['GCA',0], ['GCG',0] ], 'Ala' ], 
-[ [ ['TAT',0], ['TAC',0] ], 'Tyr' ], [ [ ['CAT',0], ['CAC',0] ], 'His' ], [ [ ['CAA',0], ['CAG',0] ], 'Gln' ],
-[ [ ['AAT',0], ['ACC',0] ], 'Asn' ], [ [ ['AAA',0], ['AAG',0] ], 'Lys' ], [ [ ['GAT',0], ['GAC',0] ], 'Asp' ], 
-[ [ ['GAA',0], ['GAG',0] ], 'Glu' ], [ [ ['TGT',0], ['TGC',0] ], 'Cys' ], [ [ ['TGG',0] ], 'Trp' ], [ [ ['CGT',0], 
-['CGC',0], ['CGA',0], ['CGG',0], ['AGA',0], ['AGG',0] ], 'Arg' ], [ [ ['GGT',0], ['GGC',0], ['GGA',0], ['GGG',0] ], 'Gly' ],
-[ [ ['TAA',0], ['TCA',0], ['TGA',0] ], 'STOP' ]  ]
+#Protein information
+Alanine_Info= {'Name': 'Alanine', 'symbols':['Ala','A'], 'codon':['GCU', 'GCC', 'GCA', 'GCG']}
+Arginine_Info= {'Name': 'Arginine', 'symbols':['Arg','R'], 'codon':['CGU', 'CGC', 'CGA', 'CGG']}
+AsparticAcid_Info={'Name': 'Aspartic acid' , 'symbols':['Asp', 'D', 'codon':['GAU', 'GAC']}
+Cysteine_Info={'Name': 'Cysteine' , 'symbols':['Cys','C'], 'codon':['UGU', 'UGC']}
+GlutamicAcid_Info={'Name': 'Glutamic acid', 'symbols':['Glu', 'E'], 'codon':['GAA', 'GAG']}
+Glutamine_Info={'Name': 'Glutamine', 'symbols':['Gln', 'Q'], 'codon':['CAA', 'CAG']}
+Glycine_Info={'Name': 'Glycine', 'symbols':['Gly','G'], 'codon':['GGU', 'GGC', 'GGA', 'GGG']}
+Histidine_Info={'Name': 'Histidine', 'symbols':['His', 'H'], 'codon':['CAU', 'CAC']}
+Isoleucine_Info={'Name': 'Isoleucine', 'symbols':['Ile', 'I'], 'codon':['AUU', 'AUC', 'AUA']}
+Leucine_Info={'Name': 'Leucine', 'symbols':['Leu', 'L'], 'codon':['CUU', 'CUC', 'CUA', 'CUG']}
+Lysine_Info={'Name': 'Lysine', 'symbols':['Lys','K'], 'codon':['AAA', 'AAG']}
+Methionine_Info={'Name': 'Methionine', 'symbols':['Met', 'M'], 'codon':['AUG']}
+Phenylalanine_Info={'Name': 'Phenylalanine', 'symbols':['Phe', 'F'], 'codon':['UUU', 'UUC']}
+Proline_Info={'Name': 'Proline', 'symbols':['Pro', 'P'], 'codon':['CCU', 'CCC', 'CCA', 'CCG']}
+Serine_Info={'Name': 'Serine', 'symbols':['Ser', 'S'], 'codon':['UCU', 'UCC', 'UCA', 'UCG']}
+Threonine_Info={'Name': 'Threonine', 'symbols':['Thr', 'T'], 'codon':['ACU', 'ACC', 'ACA', 'ACG']}
+Tryptophan_Info={'Name': 'Tryptophan', 'symbols':['Trp', 'W'], 'codon':['UGG']}
+Valine_Info={'Name': 'Valine', 'symbols':['Val', 'V'], 'codon':['GUU', 'GUC', 'GUA', 'GUG']}
 
-AminoAcid_Symbols = [ ['Alanine','Ala','A'], ['Arginine','Arg','R'], 
-['Aspartic acid', 'Asp', 'D'], ['Cysteine', 'Cys','C'], ['Glutamic acid', 'Glu', 'E'], 
-['Glutamine', 'Gln', 'Q'], ['Glycine', 'Gly','G'], ['Histidine','His',	'H'], 
-['Isoleucine', 'Ile',	'I'], ['Leucine', 'Leu', 'L'], ['Lysine', 'Lys','K'], 
-['Methionine', 'Met', 'M'], ['Phenylalanine', 'Phe',	'F'], ['Proline', 'Pro', 'P'],
-['Serine', 'Ser', 'S'], ['Threonine', 'Thr',	'T'], ['Tryptophan', 'Trp',	'W'], 
-['Valine', 'Val',	'V'] ]
+Proteins_List =
 
 def translation(gene, codon_info): # translations the gene sequence to an polypeptide
     stop = 0                                
@@ -218,10 +222,28 @@ def predicted_structure (polypeptid):
             return ([Beta_Sheets, Alpha_Helix])
         endOf_sequence = endOf_sequence + 1 
 
+def transcription (protein_File): # transcriptes protein sequence to RNA sequence and save to 
+    sequence = protein_File
+    transcript_sequence = ''
+    while (sequence !=  ''):
+        nucleotide = sequence[:1]
+        if(nucleotide == 'A' or nucleotide == 'a'):
+            transcript_sequence = transcript_sequence + 'U'
+        elif(nucleotide == 'T' or nucleotide == 't'):
+             transcript_sequence = transcript_sequence + 'A'
+        elif(nucleotide == 'G' or nucleotide == 'g'):
+            transcript_sequence = transcript_sequence + 'C'
+        elif(nucleotide == 'C' or nucleotide == 'c'):
+            transcript_sequence = transcript_sequence + 'G'
+        sequence = sequence[1:]
+    transcript_File = open("transcripted RNA seqeunce.txt", "w+")
+    return transcript_sequence
+    
 try:
     with open(File_Location,'r') as  Gene_Sequence: #open the FASTA file and stores the gene sequence into GENE_Sequence
         gene_Information = Gene_Sequence.readline() # Stores FASTA File heading
         nucleotide_sequence =''
+        outFile = transcription(Gene_Sequence.read().replace('\n', ''))
         for line in  Gene_Sequence: # retrieve every nucleotide squence per line into single string of nucleotides
             line = line [:(len(line)-1)]
             nucleotide_sequence = nucleotide_sequence + line
